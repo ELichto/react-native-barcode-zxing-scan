@@ -12,6 +12,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
@@ -44,6 +45,7 @@ public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implement
         Callback mCallback = callback;
         IntentIntegrator integrator = new IntentIntegrator(getCurrentActivity());
         integrator.setOrientationLocked(true);
+        integrator.setBeepEnabled(false);
         integrator.setCaptureActivity(ContinuousCaptureActivity.class);
         integrator.initiateScan();
         reactContext.addActivityEventListener(this);
