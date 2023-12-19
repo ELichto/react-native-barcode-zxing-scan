@@ -17,6 +17,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
     private final ReactApplicationContext reactContext;
+    private Callback mcallback;
 
     public BarcodeZxingScanModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -42,7 +43,7 @@ public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implement
 
     @ReactMethod
     public void showQrReader(Callback callback) {
-        Callback mCallback = callback;
+        mcallback = callback;
         IntentIntegrator integrator = new IntentIntegrator(getCurrentActivity());
         integrator.setOrientationLocked(true);
         integrator.setBeepEnabled(false);
@@ -54,7 +55,9 @@ public class BarcodeZxingScanModule extends ReactContextBaseJavaModule implement
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode, data);
+        mcallback.invoke(result.getContents(),result.getBarcodeImagePath());
+        reactContext.removeActivityEventListener(this);
     }
 
     @Override
